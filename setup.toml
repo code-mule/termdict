@@ -1,0 +1,20 @@
+[project]
+name = "TermDict"
+version = "0.1.0"
+description = "Small script for a dictionary stored as CSV and handled via the terminal command line."
+readme = "README.md"
+license = "AGPL"
+authors = [
+    { name = "BertrandTerrier", email = "i.stemmert@gmail.com"},
+]
+maintainers = []
+keywords = []
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Operating System :: Linux"
+]
+
+[project.urls]
+repository = "https://codeberg.org/bertrandterrier/termdict"
+alt_repository = "https://github.com/code-mule/termdict"
