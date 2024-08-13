@@ -136,6 +136,9 @@ class TermDict:
 
         return 
 
+def check_return_code(code:str) -> bool:
+
+
 def main():
     # Create configuration directory if not existing
     first_time()
@@ -173,6 +176,45 @@ def main():
                        tbl_style=curr_settings.get_val("style.table"),
                        highlight_cols=curr_settings.get_val('hl.columns')
                        )
+    
+    ### MAIN LOOP ###
+    fail_counter = 0
+    exit_loop = False
+    rtn_code = None
+    while exit_loop == False:
+
+        # Emergency stop if going on to long
+        if abs(fail_counter) >= 1111:
+            print(f'== WARNING FAILURE!')
+            print('\t::Process looping to long.')
+            print('\t== ABORTING...')
+
+            sys.exit(2)
+
+        # Replace possible words
+        for h in ['help','HELP','Help']:
+            if h in return_code:
+                rtn_code = rtn_code.replace(h,'?')
+        
+        # Split command from arguments
+        if ':' in rtn_code:
+            command,cmd_args = rtn_code.split(':')
+        else:
+            command:str = rtn_code
+            cmd_args = None
+
+        # Check the command
+        force = False
+        pre_exit = False
+        for c in command:
+            match c.lower():
+                case 'q':
+                    if force == True:
+                        sys.exit(3)
+                case '?'|'!'|'x':
+                    pass
+                case ''
+
     return
 
 if __name__ == "__main__":

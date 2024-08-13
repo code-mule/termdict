@@ -43,6 +43,6 @@ class ConfigSettings:
     def get_val(self,conf_key):
         if not conf_key in self.settings:
             print(f'== WARNING.\n\t::No setting like\n\t > {conf_key}')
-            return None
+            return
         
         return self.content[conf_key]
