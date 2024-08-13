@@ -2,6 +2,7 @@
 
 import os
 import shutil
+import toml
 
 # Create necessary paths
 fdir:str = os.path.dirname(os.path.abspath(__file__))
@@ -21,3 +22,27 @@ def first_time() -> None:
         shutil.copy2(tmpl_conf_path,conf_path)
 
     return
+
+class ConfigSettings:
+
+    def __init__(self): 
+        self.content:dict = self.load_config()
+        self.settings:list = [key for key in self.content.keys()]
+
+    def load_config(self):
+        print('--Reading file')
+        print(f'\t ::{conf_path}')
+        
+        with open(conf_path,'r') as f:
+            configs:dict = toml.load(f)
+    
+        print('== Loaded configurations.')
+
+        return configs
+
+    def get_val(self,conf_key):
+        if not conf_key in self.settings:
+            print(f'== WARNING.\n\t::No setting like\n\t > {conf_key}')
+            return None
+        
+        return self.content[conf_key]

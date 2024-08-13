@@ -1,10 +1,11 @@
 # bertrandterrier@codeberg.org/termdict/main.py
 
-from ios import first_time
+from ios import first_time,ConfigSettings
 from com import get_cl_args
+from tabulate import tabulate
 import pandas as pd
 import sys
-from tabulate import tabulate
+import os
 
 # Create the menu legend
 MENU:dict = {
@@ -151,8 +152,27 @@ def main():
     if rt_code >= 1:
         # !!! CONFIGURATION SETTINGS FUNCTION !!! #
         sys.exit(1)
+
+    # Load settings from configuration file
+    curr_settings = ConfigSettings()
     
+    # Check for data folder
+    inp_csv:str = os.path.expanduser(args.input)
+    raw_basename,_ = os.path.splitext(os.path.basename(inp_csv))
+    inp_dir:str = os.path.dirname(inp_csv)
+
+    entry_dir:str = os.path.join(inp_dir,f'.{raw_basename}_zttl')
+
+    if not os.path.exists(entry_dir):
+        entry_dir = f'EMTPY%{entry_dir}'
+    
+
     # Initialize dictionary object
+    lexikon = TermDict(csv=args.input,
+                       data_dir=entry_dir,
+                       tbl_style=curr_settings.get_val("style.table"),
+                       highlight_cols=curr_settings.get_val('hl.columns')
+                       )
     return
 
 if __name__ == "__main__":
