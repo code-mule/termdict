@@ -6,6 +6,21 @@ import pandas as pd
 import sys
 from tabulate import tabulate
 
+# Create the menu legend
+MENU:dict = {
+            '+':'Add entry',
+            '-':'Delete entry',
+            'i':'Inspect entry. (i;<entry-idx>)',
+            'f':'Find entry. (f:<column>)',
+            'st':'Show top (st:<range>, default=10)',
+            'sb':'Show from bottom (sb:<range>,default=10)',
+            'w':'Save changes.',
+            'q':'Quit, (`wq`: Save and quit.)',
+            '<command>!':'Enforce command.',
+            '?':'Show legend.'
+        }
+
+
 # ================================================== #
 
 def preprocess(
@@ -36,6 +51,20 @@ class TermDict:
             tbl_style:str,
             highlight_cols:dict
             ) -> int:
+        """Creates a dictionary object holding the pandas DataFrame, the typographical 
+        table string and different information to the dictionary.
+
+        Args:
+            csv (str): Path to the CSV file with main dictionary data.
+            data_dir (str): Directory to the individual dictionary entries. 
+                            Will be "~/.todo/<csv-name>/entries"
+            tbl_style (str): Tabulate style name for style of table.
+            highlight_cols (dict): Dictionary for highlighted columns.
+                                   (1:cyan, 2:orange, 3:magenta)
+
+        Returns:
+            int: Return code
+        """
         # Colors
         self.MAGENTA = '\033[5m'
         self.CYAN = '\033[6m'
@@ -50,20 +79,6 @@ class TermDict:
 
         # Create table from pandas DataFrame
         self.tbl:str = self.create_term_tbl(tbl_style)
-
-        # Create the menu legend
-        self.menu:dict = {
-            '+':'Add entry',
-            '-':'Delete entry',
-            'i':'Inspect entry. (i;<entry-idx>)',
-            'f':'Find entry. (f:<column>)',
-            'st':'Show top (st:<range>, default=10)',
-            'sb':'Show from bottom (sb:<range>,default=10)',
-            'w':'Save changes.',
-            'q':'Quit, (`wq`: Save and quit.)',
-            '<command>!':'Enforce command.',
-            '?':'Show legend.'
-        }
 
     def create_term_tbl(self,style:str,rng:tuple=(-1,-1)) -> str:
         """Creates a graphical string for table output.
@@ -115,7 +130,7 @@ class TermDict:
     def print_legend(self) -> None:
         print('+++ LEGEND +++')
 
-        for cmd,description in self.menu.items():
+        for cmd,description in MENU.items():
             print(f' --> {self.BOLD}{cmd}{self.RESET}\t :: {description}')
 
         return 
